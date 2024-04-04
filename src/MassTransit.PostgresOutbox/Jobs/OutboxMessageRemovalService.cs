@@ -6,49 +6,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace MassTransit.PostgresOutbox.Jobs
+namespace MassTransit.PostgresOutbox.Jobs;
+
+internal class OutboxMessageRemovalService<TDbContext>(
+    IServiceScopeFactory serviceScopeFactory,
+    ILogger<OutboxMessageRemovalService<TDbContext>> logger,
+    Settings settings)
+    : BackgroundService
+    where TDbContext : DbContext, IOutboxDbContext
 {
-    internal class OutboxMessageRemovalService<TDbContext> : BackgroundService
-      where TDbContext : DbContext, IOutboxDbContext
-   {
-      private readonly int _beforeInDays;
-      private readonly PeriodicTimer _timer;
-      private readonly ILogger<OutboxMessageRemovalService<TDbContext>> _logger;
-      private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly int _beforeInDays = settings.OutboxRemovalBeforeInDays;
+    private readonly PeriodicTimer _timer = new(settings.OutboxRemovalTimerPeriod);
 
-      public OutboxMessageRemovalService(IServiceScopeFactory serviceScopeFactory, ILogger<OutboxMessageRemovalService<TDbContext>> logger, Settings settings)
-      {
-         _serviceScopeFactory = serviceScopeFactory;
-         _logger = logger;
-         _timer = new(settings.OutboxRemovalTimerPeriod);
-         _beforeInDays = settings.OutboxRemovalBeforeInDays;
-      }
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    {
+        while (await _timer.WaitForNextTickAsync(cancellationToken))
+        {
+            logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} started iteration");
 
-      protected override async Task ExecuteAsync(CancellationToken cancellationToken)
-      {
-         while (await _timer.WaitForNextTickAsync(cancellationToken))
-         {
-            _logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} started iteration");
-
-            using var scope = _serviceScopeFactory.CreateScope();
+            using var scope = serviceScopeFactory.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             try
             {
-               var daysBefore = DateTime.UtcNow.AddDays(-_beforeInDays);
+                var daysBefore = DateTime.UtcNow.AddDays(-_beforeInDays);
 
-               await dbContext.OutboxMessages
-                              .Where(x => x.State == MessageState.Done)
-                              .Where(x => x.UpdatedAt < daysBefore)
-                              .ExecuteDeleteAsync(cancellationToken);
+                await dbContext.OutboxMessages
+                    .Where(x => x.State == MessageState.Done)
+                    .Where(x => x.UpdatedAt < daysBefore)
+                    .ExecuteDeleteAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-               _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
-            _logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} finished iteration");
-         }
-      }
-   }
+            logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} finished iteration");
+        }
+    }
 }

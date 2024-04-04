@@ -1,8 +1,7 @@
-﻿namespace MassTransit.PostgresOutbox.Enums
+﻿namespace MassTransit.PostgresOutbox.Enums;
+
+public enum MessageState
 {
-   public enum MessageState
-   {
-      New = 1,
-      Done = 2,
-   }
+    New = 1,
+    Done = 2,
 }

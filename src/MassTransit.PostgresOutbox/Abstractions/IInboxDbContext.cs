@@ -1,10 +1,9 @@
 ﻿using MassTransit.PostgresOutbox.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MassTransit.PostgresOutbox.Abstractions
+namespace MassTransit.PostgresOutbox.Abstractions;
+
+public interface IInboxDbContext
 {
-    public interface IInboxDbContext
-    {
-        public DbSet<InboxMessage> InboxMessages { get; set; }
-    }
+    public DbSet<InboxMessage> InboxMessages { get; set; }
 }
