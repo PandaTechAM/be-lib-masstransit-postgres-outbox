@@ -1,5 +1,5 @@
-﻿using FinHub.Mock1.Box.Abstractions;
-using MassTransit.PostgresOutbox;
+﻿using MassTransit.PostgresOutbox;
+using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MassTransit.PostgresOutbox.Jobs
 {
-   internal class OutboxMessageRemovalService<TDbContext> : BackgroundService
+    internal class OutboxMessageRemovalService<TDbContext> : BackgroundService
       where TDbContext : DbContext, IOutboxDbContext
    {
       private readonly int _beforeInDays;

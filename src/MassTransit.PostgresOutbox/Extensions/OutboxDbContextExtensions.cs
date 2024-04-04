@@ -1,10 +1,10 @@
-﻿using FinHub.Mock1.Box.Abstractions;
+﻿using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Entities;
 using Newtonsoft.Json;
 
 namespace MassTransit.PostgresOutbox.Extensions
 {
-   public static class OutboxDbContextExtensions
+    public static class OutboxDbContextExtensions
    {
       public static Guid AddToOutbox<T>(this IOutboxDbContext dbContext, T message)
       {

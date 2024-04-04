@@ -1,5 +1,4 @@
-﻿using FinHub.Mock1.Box.Abstractions;
-using MassTransit.PostgresOutbox.Abstractions;
+﻿using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

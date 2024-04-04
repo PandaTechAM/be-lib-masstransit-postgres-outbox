@@ -1,7 +1,6 @@
 ﻿using EFCore.PostgresExtensions.Enums;
 using EFCore.PostgresExtensions.Extensions;
-using FinHub.Mock1.Box.Abstractions;
-using MassTransit;
+using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
