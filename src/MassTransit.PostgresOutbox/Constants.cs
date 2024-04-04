@@ -1,7 +1,6 @@
-﻿namespace MassTransit.PostgresOutbox
+﻿namespace MassTransit.PostgresOutbox;
+
+public class Constants
 {
-   public class Constants
-   {
-      public const string OutboxMessageId = "OutboxMessageId";
-   }
+   public const string OutboxMessageId = "OutboxMessageId";
 }
