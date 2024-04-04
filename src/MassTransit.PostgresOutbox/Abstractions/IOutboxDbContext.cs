@@ -1,10 +1,10 @@
 ﻿using MassTransit.PostgresOutbox.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinHub.Mock1.Box.Abstractions
+namespace MassTransit.PostgresOutbox.Abstractions
 {
-   public interface IOutboxDbContext
-   {
-      public DbSet<OutboxMessage> OutboxMessages { get; set; }
-   }
+    public interface IOutboxDbContext
+    {
+        public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    }
 }

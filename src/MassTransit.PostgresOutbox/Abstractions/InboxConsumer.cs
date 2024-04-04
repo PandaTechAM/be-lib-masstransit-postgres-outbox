@@ -1,15 +1,12 @@
 ﻿using EFCore.PostgresExtensions.Enums;
 using EFCore.PostgresExtensions.Extensions;
-using MassTransit;
-using MassTransit.PostgresOutbox;
-using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Entities;
 using MassTransit.PostgresOutbox.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace FinHub.Mock1.Box.Abstractions
+namespace MassTransit.PostgresOutbox.Abstractions
 {
     public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
       where TMessage : class
