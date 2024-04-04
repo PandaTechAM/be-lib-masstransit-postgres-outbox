@@ -1,10 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandaNuGet", "src\PandaNuGet\PandaNuGet.csproj", "{25001943-A870-4E17-A9B9-0D190CEC819B}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.PostgresOutbox", "src\PandaNuGet\MassTransit.PostgresOutbox.csproj", "{25001943-A870-4E17-A9B9-0D190CEC819B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandaNuGet.Tests", "test\PandaNuGet.Tests\PandaNuGet.Tests.csproj", "{0305E58F-1C47-454C-B10B-A223F2561A85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PandaNuGet.Tests", "test\PandaNuGet.Tests\PandaNuGet.Tests.csproj", "{0305E58F-1C47-454C-B10B-A223F2561A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PandaNuGet.Demo", "test\PandaNuGet.Demo\PandaNuGet.Demo.csproj", "{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PandaNuGet.Demo", "test\PandaNuGet.Demo\PandaNuGet.Demo.csproj", "{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F8A6DCFE-8924-49A4-B3E9-2034593F54E5}"
 EndProject
@@ -12,10 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FEE159A2-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FF54200-8B03-4828-AAAE-297E30E2A00A}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\main.yml = .github\workflows\main.yml
 		.gitignore = .gitignore
-		Readme.md = Readme.md
 		global.json = global.json
+		.github\workflows\main.yml = .github\workflows\main.yml
+		Readme.md = Readme.md
 	EndProjectSection
 EndProject
 Global
@@ -37,9 +40,15 @@ Global
 		{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25001943-A870-4E17-A9B9-0D190CEC819B} = {F8A6DCFE-8924-49A4-B3E9-2034593F54E5}
-		{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE} = {FEE159A2-74A0-4469-9B93-52987CA1A3CA}
 		{0305E58F-1C47-454C-B10B-A223F2561A85} = {FEE159A2-74A0-4469-9B93-52987CA1A3CA}
+		{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE} = {FEE159A2-74A0-4469-9B93-52987CA1A3CA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32F4406B-A6AC-4ACA-BBC6-30D53665B7F7}
 	EndGlobalSection
 EndGlobal

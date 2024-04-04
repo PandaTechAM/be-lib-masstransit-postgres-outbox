@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\PandaNuGet\PandaNuGet.csproj" />
+      <ProjectReference Include="..\..\src\PandaNuGet\MassTransit.PostgresOutbox.csproj" />
     </ItemGroup>
 
 </Project>
