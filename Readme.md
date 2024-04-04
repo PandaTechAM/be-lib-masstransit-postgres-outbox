@@ -60,6 +60,14 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
+And you need to call UseQueryLocks() inside AddDbContext or AddDbContextPool , this needs for enabling ForUpdate feature.
+
+```csharp
+  builder.Services.AddDbContextPool<PostgresContext>(options =>
+         options.UseNpgsql(connectionString)
+                .UseQueryLocks());
+```
+
 Service Registration: Register essential services on startup, specifying the DbContext type. 
 You can optionally override settings(its optional parameter).
 
