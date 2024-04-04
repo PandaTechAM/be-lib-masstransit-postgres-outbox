@@ -5,9 +5,9 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.PostgresOutbox", "src\PandaNuGet\MassTransit.PostgresOutbox.csproj", "{25001943-A870-4E17-A9B9-0D190CEC819B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PandaNuGet.Tests", "test\PandaNuGet.Tests\PandaNuGet.Tests.csproj", "{0305E58F-1C47-454C-B10B-A223F2561A85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.PostgresOutbox.Tests", "test\PandaNuGet.Tests\MassTransit.PostgresOutbox.Tests.csproj", "{0305E58F-1C47-454C-B10B-A223F2561A85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PandaNuGet.Demo", "test\PandaNuGet.Demo\PandaNuGet.Demo.csproj", "{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.PostgresOutbox.Demo", "test\PandaNuGet.Demo\MassTransit.PostgresOutbox.Demo.csproj", "{8A6AA36D-1CEF-4018-9C9D-7D029F3EAECE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F8A6DCFE-8924-49A4-B3E9-2034593F54E5}"
 EndProject

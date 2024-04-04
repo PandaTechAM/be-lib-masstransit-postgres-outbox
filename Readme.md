@@ -43,6 +43,74 @@ Stay tuned for the next sections where we'll cover the usage details, showcasing
 extension to enhance your distributed systems.
 
 ## Usage
+Take into account that examples below are given for configuring both inbox and outbox patterns.
+If you need only one of those , consider using appropriate methods available(eg. instead of AddOutboxInboxServices use AddInboxServices and etc).
+
+Configuration
+
+Entity Configuration: Ensure your DbContext implements the IOutboxDbContext and IInboxDbContext interfaces.
+Configure your entities and generate migrations. 
+Call ConfigureInboxOutboxEntities on your ModelBuilder to configure the necessary tables for inbox and outbox patterns.
+
+```csharp
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.ConfigureInboxOutboxEntities();
+}
+```
+
+Service Registration: Register essential services on startup, specifying the DbContext type. 
+You can optionally override settings(its optional parameter).
+
+```csharp
+
+services.AddOutboxInboxServices<PostgresContext>();
+```
+
+Publishing Messages (Outbox Pattern)
+
+To publish a message using the outbox pattern, call the AddToOutbox method on your DbContext, 
+specifying your message. Remember to call SaveChanges() to persist the message to the database.
+
+```csharp
+
+dbContext.Orders.Add(new Order
+{
+    Amount = 555,
+    CreatedAt = DateTime.UtcNow,
+});
+
+// Add message to the outbox
+dbContext.AddToOutbox(new OrderCreatedEvent());
+
+// Save changes to the database
+dbContext.SaveChanges();
+```
+
+Consuming Messages (Inbox Pattern)
+
+To consume messages using the inbox pattern, create a consumer that inherits from
+InboxConsumer<TMessage, TDbContext> class, specifying the message type and DbContext type as generic arguments.
+
+```csharp
+
+public class YourConsumer : InboxConsumer<YourMessage, PostgresContext>
+{
+    private readonly PostgresContext _context;
+
+    public YourConsumer(PostgresContext dbContext, IServiceScopeFactory serviceScopeFactory)
+        : base(serviceScopeFactory)
+    {
+        _context = dbContext;
+    }
+
+    public override async Task Consume(YourMessage message)
+    {
+        // Implement your message processing logic here
+    }
+}
+```
 
 ## License
 
