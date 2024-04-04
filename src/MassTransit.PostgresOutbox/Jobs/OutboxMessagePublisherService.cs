@@ -17,13 +17,10 @@ namespace MassTransit.PostgresOutbox.Jobs
         private readonly PeriodicTimer _timer;
         private readonly ILogger<OutboxMessagePublisherService<TDbContext>> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IPublishEndpoint _publishEndpoint;
 
-        public OutboxMessagePublisherService(IPublishEndpoint publishEndpoint,
-           IServiceScopeFactory serviceScopeFactory,
+        public OutboxMessagePublisherService(IServiceScopeFactory serviceScopeFactory,
            ILogger<OutboxMessagePublisherService<TDbContext>> logger, Settings settings)
         {
-            _publishEndpoint = publishEndpoint;
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
             _timer = new(settings.PublisherTimerPeriod);
@@ -38,6 +35,7 @@ namespace MassTransit.PostgresOutbox.Jobs
 
                 using var scope = _serviceScopeFactory.CreateScope();
                 using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+                var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 using var transactionScope = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
 
                 try
@@ -64,7 +62,7 @@ namespace MassTransit.PostgresOutbox.Jobs
 
                             var messageObject = JsonConvert.DeserializeObject(message.Payload, type!);
 
-                            await _publishEndpoint.Publish(messageObject!, type!, x => x.Headers.Set(Constants.OutboxMessageId, message.Id), cancellationToken);
+                            await publishEndpoint.Publish(messageObject!, type!, x => x.Headers.Set(Constants.OutboxMessageId, message.Id), cancellationToken);
 
                             publishedMessageIds.Add(message.Id);
                         }
