@@ -22,7 +22,7 @@ internal class OutboxMessageRemovalService<TDbContext>(
     {
         while (await _timer.WaitForNextTickAsync(cancellationToken))
         {
-            logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} started iteration");
+            logger.LogDebug($"{nameof(OutboxMessageRemovalService<TDbContext>)} started iteration");
 
             using var scope = serviceScopeFactory.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
@@ -41,7 +41,7 @@ internal class OutboxMessageRemovalService<TDbContext>(
                 logger.LogError(ex, ex.Message);
             }
 
-            logger.LogInformation($"{nameof(OutboxMessageRemovalService<TDbContext>)} finished iteration");
+            logger.LogDebug($"{nameof(OutboxMessageRemovalService<TDbContext>)} finished iteration");
         }
     }
 }
