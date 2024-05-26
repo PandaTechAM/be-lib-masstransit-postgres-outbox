@@ -24,7 +24,7 @@ internal class OutboxMessagePublisherService<TDbContext>(
     {
         while (await _timer.WaitForNextTickAsync(cancellationToken))
         {
-            logger.LogInformation($"{nameof(OutboxMessagePublisherService<TDbContext>)} started iteration");
+            logger.LogDebug($"{nameof(OutboxMessagePublisherService<TDbContext>)} started iteration");
 
             using var scope = serviceScopeFactory.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
@@ -89,7 +89,7 @@ internal class OutboxMessagePublisherService<TDbContext>(
                 await transactionScope.RollbackAsync(cancellationToken);
             }
 
-            logger.LogInformation($"{nameof(OutboxMessagePublisherService<TDbContext>)} finished iteration");
+            logger.LogDebug($"{nameof(OutboxMessagePublisherService<TDbContext>)} finished iteration");
         }
     }
 }

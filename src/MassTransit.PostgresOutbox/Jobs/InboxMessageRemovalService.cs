@@ -20,7 +20,7 @@ internal class InboxMessageRemovalService<TDbContext>(
     {
         while (await _timer.WaitForNextTickAsync(cancellationToken))
         {
-            logger.LogInformation($"{nameof(InboxMessageRemovalService<TDbContext>)} started iteration");
+            logger.LogDebug($"{nameof(InboxMessageRemovalService<TDbContext>)} started iteration");
 
             using var scope = serviceScopeFactory.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
@@ -39,7 +39,7 @@ internal class InboxMessageRemovalService<TDbContext>(
                 logger.LogError(ex, ex.Message);
             }
 
-            logger.LogInformation($"{nameof(InboxMessageRemovalService<TDbContext>)} finished iteration");
+            logger.LogDebug($"{nameof(InboxMessageRemovalService<TDbContext>)} finished iteration");
         }
     }
 }
