@@ -23,13 +23,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
 
     public async Task Consume(ConsumeContext<TMessage> context)
     {
-        var messageId = context.Headers.Get<Guid>(Constants.OutboxMessageId);
-
-        if (messageId is null)
-        {
-            await Consume(context.Message);
-            return;
-        }
+        var messageId = context.Headers.Get<Guid>(Constants.OutboxMessageId) ?? context.MessageId;
 
         using var scope = _serviceScopeFactory.CreateScope();
 
@@ -43,7 +37,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
         {
             dbContext.InboxMessages.Add(new InboxMessage
             {
-                MessageId = messageId.Value,
+                MessageId = messageId!.Value,
                 CreatedAt = DateTime.UtcNow,
                 State = MessageState.New,
                 ConsumerId = _consumerId,
