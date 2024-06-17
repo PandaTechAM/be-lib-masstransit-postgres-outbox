@@ -24,8 +24,8 @@
 
     <ItemGroup>
       <PackageReference Include="MassTransit" Version="8.2.2" />
-      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Pandatech.EFCore.PostgresExtensions" Version="2.0.1" />
     </ItemGroup>
