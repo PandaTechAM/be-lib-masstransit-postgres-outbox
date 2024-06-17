@@ -43,7 +43,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
         {
             dbContext.InboxMessages.Add(new InboxMessage
             {
-                MessageId = messageId!.Value,
+                MessageId = messageId.Value,
                 CreatedAt = DateTime.UtcNow,
                 State = MessageState.New,
                 ConsumerId = _consumerId,
@@ -52,7 +52,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
             await dbContext.SaveChangesAsync();
         }
 
-        using var transactionScope =
+        await using var transactionScope =
             await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted);
 
         var inboxMessage = await dbContext.InboxMessages
@@ -79,11 +79,11 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
         }
         finally
         {
-            inboxMessage!.UpdatedAt = DateTime.UtcNow;
+            inboxMessage.UpdatedAt = DateTime.UtcNow;
             await dbContext.SaveChangesAsync();
             await transactionScope.CommitAsync();
         }
     }
 
-    public abstract Task Consume(TMessage message);
+    protected abstract Task Consume(TMessage message);
 }
