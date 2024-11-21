@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 		.github\workflows\main.yml = .github\workflows\main.yml
 		Readme.md = Readme.md
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.PostgresOutbox", "src\MassTransit.PostgresOutbox\MassTransit.PostgresOutbox.csproj", "{6DB923B1-083D-4585-843E-895EC761B052}"
