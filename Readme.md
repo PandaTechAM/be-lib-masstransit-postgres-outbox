@@ -1,13 +1,13 @@
 - [1. Pandatech.MassTransit.PostgresOutbox](#1-pandatechmasstransitpostgresoutbox)
-  - [1.1. Features](#11-features)
-  - [1.2. Getting Started](#12-getting-started)
-  - [1.3. Installation](#13-installation)
-  - [1.4. Configuration](#14-configuration)
-  - [1.5. Usage](#15-usage)
-    - [1.5.1. Configuration](#151-configuration)
-    - [1.5.2. Publishing Messages (Outbox Pattern)](#152-publishing-messages-outbox-pattern)
-    - [1.5.3. Consuming Messages (Inbox Pattern)](#153-consuming-messages-inbox-pattern)
-  - [1.6. License](#16-license)
+    - [1.1. Features](#11-features)
+    - [1.2. Getting Started](#12-getting-started)
+    - [1.3. Installation](#13-installation)
+    - [1.4. Configuration](#14-configuration)
+    - [1.5. Usage](#15-usage)
+        - [1.5.1. Configuration](#151-configuration)
+        - [1.5.2. Publishing Messages (Outbox Pattern)](#152-publishing-messages-outbox-pattern)
+        - [1.5.3. Consuming Messages (Inbox Pattern)](#153-consuming-messages-inbox-pattern)
+    - [1.6. License](#16-license)
 
 # 1. Pandatech.MassTransit.PostgresOutbox
 
@@ -63,7 +63,8 @@ AddInboxServices and etc).
 
 **Entity Configuration:** Ensure your `DbContext` implements the `IOutboxDbContext` and `IInboxDbContext` interfaces.
 Configure your entities and generate migrations.
-Call `ConfigureInboxOutboxEntities` on your `ModelBuilder` to configure the necessary tables for inbox and outbox patterns.
+Call `ConfigureInboxOutboxEntities` on your `ModelBuilder` to configure the necessary tables for inbox and outbox
+patterns.
 
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,8 +72,10 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     modelBuilder.ConfigureInboxOutboxEntities();
 }
 ```
+
 And you need to call `UseQueryLocks()` inside `AddDbContext` or `AddDbContextPool` , this needs for enabling `ForUpdate`
 feature.
+
 ```csharp
 builder.Services.AddDbContextPool<PostgresContext>(options =>
          options.UseNpgsql(connectionString)
