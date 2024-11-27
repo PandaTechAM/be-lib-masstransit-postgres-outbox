@@ -8,13 +8,13 @@
         <PackageReadmeFile>Readme.md</PackageReadmeFile>
         <Authors>Pandatech</Authors>
         <Copyright>MIT</Copyright>
-        <Version>2.0.0</Version>
+        <Version>2.0.2</Version>
         <PackageId>Pandatech.MassTransit.PostgresOutbox</PackageId>
         <Title>Pandatech MassTransit PostgreSQL Outbox Extension</Title>
         <PackageTags>Pandatech, library, postgres, distributed systems, microservices, modular monolith, messaging, efcore, mass transit, outbox pattern, inbox pattern</PackageTags>
         <Description>Pandatech.MassTransit.PostgresOutbox extends MassTransit to offer advanced message handling capabilities for distributed systems. With first-class support for multiple DbContexts, this library integrates seamlessly with Entity Framework Core and PostgreSQL, providing reliable Outbox and Inbox patterns. It ensures consistent message delivery and processing in complex microservices architectures, leveraging PostgreSQL's ForUpdate feature to handle concurrency with ease.</Description>
         <RepositoryUrl>https://github.com/PandaTechAM/be-lib-pandatech-masstransit-postgres-outbox</RepositoryUrl>
-        <PackageReleaseNotes>.Net 9 Upgrade</PackageReleaseNotes>
+        <PackageReleaseNotes>Newtonsoft removal</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,11 +23,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MassTransit" Version="8.2.2"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Pandatech.EFCore.PostgresExtensions" Version="2.0.1"/>
+        <PackageReference Include="MassTransit" Version="8.3.2" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+        <PackageReference Include="Pandatech.EFCore.PostgresExtensions" Version="4.0.0" />
     </ItemGroup>
 
 </Project>

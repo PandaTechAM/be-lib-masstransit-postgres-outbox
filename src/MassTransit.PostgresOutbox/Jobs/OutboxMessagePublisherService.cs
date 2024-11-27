@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text.Json;
 using EFCore.PostgresExtensions.Enums;
 using EFCore.PostgresExtensions.Extensions;
 using MassTransit.PostgresOutbox.Abstractions;
@@ -7,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace MassTransit.PostgresOutbox.Jobs;
 
@@ -56,7 +56,7 @@ internal class OutboxMessagePublisherService<TDbContext>(
                {
                   var type = Type.GetType(message.Type);
 
-                  var messageObject = JsonConvert.DeserializeObject(message.Payload, type!);
+                  var messageObject = JsonSerializer.Deserialize(message.Payload, type!);
 
                   await publishEndpoint.Publish(messageObject!,
                      type!,

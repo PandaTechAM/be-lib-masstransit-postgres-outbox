@@ -24,7 +24,7 @@ internal class OutboxMessageRemovalService<TDbContext>(
          logger.LogDebug($"{nameof(OutboxMessageRemovalService<TDbContext>)} started iteration");
 
          using var scope = serviceScopeFactory.CreateScope();
-         using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+         await using var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
          try
          {
