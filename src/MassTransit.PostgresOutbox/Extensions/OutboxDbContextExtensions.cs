@@ -1,7 +1,7 @@
-﻿using MassTransit.PostgresOutbox.Abstractions;
+﻿using System.Text.Json;
+using MassTransit.PostgresOutbox.Abstractions;
 using MassTransit.PostgresOutbox.Entities;
 using MassTransit.PostgresOutbox.Enums;
-using Newtonsoft.Json;
 
 namespace MassTransit.PostgresOutbox.Extensions;
 
@@ -15,7 +15,7 @@ public static class OutboxDbContextExtensions
          CreatedAt = DateTime.UtcNow,
          State = MessageState.New,
          UpdatedAt = null,
-         Payload = JsonConvert.SerializeObject(message),
+         Payload = JsonSerializer.Serialize(message),
          Type = typeof(T).AssemblyQualifiedName!
       };
 
