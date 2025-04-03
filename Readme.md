@@ -119,13 +119,13 @@ public class YourConsumer : InboxConsumer<YourMessage, PostgresContext>
 {
     private readonly PostgresContext _context;
 
-    public YourConsumer(PostgresContext dbContext, IServiceScopeFactory serviceScopeFactory)
-        : base(serviceScopeFactory)
+    public YourConsumer(PostgresContext dbContext, IServiceProvider sp)
+        : base(sp)
     {
         _context = dbContext;
     }
 
-    public override async Task Consume(YourMessage message)
+    public override async Task Consume(YourMessage message, IDbContextTransaction transaction)
     {
         // Implement your message processing logic here
     }
