@@ -4,6 +4,7 @@ using EFCore.PostgresExtensions.Extensions;
 using MassTransit.PostgresOutbox.Entities;
 using MassTransit.PostgresOutbox.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -14,23 +15,20 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
    where TDbContext : DbContext, IInboxDbContext
 {
    private readonly string _consumerId;
-   private readonly IServiceScopeFactory _serviceScopeFactory;
+   private readonly IServiceProvider _sp;
 
-   protected InboxConsumer(IServiceScopeFactory serviceScopeFactory)
+   protected InboxConsumer(IServiceProvider sp)
    {
       _consumerId = GetType()
          .ToString();
-      _serviceScopeFactory = serviceScopeFactory;
+      _sp = sp;
    }
 
    public async Task Consume(ConsumeContext<TMessage> context)
    {
       var messageId = context.Headers.Get<Guid>(Constants.OutboxMessageId) ?? context.MessageId;
-
-      using var scope = _serviceScopeFactory.CreateScope();
-
-      var dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
-      var logger = scope.ServiceProvider.GetRequiredService<ILogger<InboxConsumer<TMessage, TDbContext>>>();
+      var dbContext = _sp.GetRequiredService<TDbContext>();
+      var logger = _sp.GetRequiredService<ILogger<InboxConsumer<TMessage, TDbContext>>>();
 
       var exists =
          await dbContext.InboxMessages.AnyAsync(x => x.MessageId == messageId && x.ConsumerId == _consumerId);
@@ -57,7 +55,6 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
                                         .Where(x => x.State == MessageState.New)
                                         .ForUpdate(LockBehavior.SkipLocked)
                                         .FirstOrDefaultAsync();
-
       if (inboxMessage == null)
       {
          return;
@@ -65,21 +62,27 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
 
       try
       {
-         await Consume(context.Message);
+         await Consume(context.Message, transactionScope);
+
          inboxMessage.State = MessageState.Done;
-      }
-      catch (Exception ex)
-      {
-         logger.LogError(ex, "Exception thrown while consuming message");
-         throw;
-      }
-      finally
-      {
          inboxMessage.UpdatedAt = DateTime.UtcNow;
+
          await dbContext.SaveChangesAsync();
          await transactionScope.CommitAsync();
       }
+      catch (Exception ex)
+      {
+         logger.LogError(ex, "Exception thrown while consuming message {messageId} by {consumerId}",
+            messageId,
+            _consumerId);
+         
+         await transactionScope.RollbackAsync();
+
+         inboxMessage.UpdatedAt = DateTime.UtcNow;
+         await dbContext.SaveChangesAsync();
+         throw;
+      }
    }
 
-   protected abstract Task Consume(TMessage message);
+   protected abstract Task Consume(TMessage message, IDbContextTransaction transactionScope);
 }
