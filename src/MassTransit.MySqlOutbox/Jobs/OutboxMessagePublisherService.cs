@@ -39,8 +39,8 @@ internal class OutboxMessagePublisherService<TDbContext>(
                   SELECT * FROM OutboxMessages
                   WHERE State = {MessageState.New}
                   ORDER BY CreatedAt
-                  FOR UPDATE SKIP LOCKED
-                  LIMIT {_batchCount}")
+                  LIMIT {_batchCount}
+                  FOR UPDATE SKIP LOCKED")
                .ToListAsync(cancellationToken);
 
             if (messages.Count == 0)

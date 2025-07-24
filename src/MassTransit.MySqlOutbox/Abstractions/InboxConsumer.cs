@@ -51,9 +51,9 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
 
          var inboxMessage = await dbContext.InboxMessages
             .FromSqlInterpolated($@"
-               SELECT * FROM InboxMessages 
-               WHERE MessageId = {messageId} 
-               AND ConsumerId = {_consumerId} 
+               SELECT * FROM InboxMessages
+               WHERE MessageId = {messageId}
+               AND ConsumerId = {_consumerId}
                AND State = {MessageState.New}
                FOR UPDATE SKIP LOCKED")
             .FirstOrDefaultAsync(ct);

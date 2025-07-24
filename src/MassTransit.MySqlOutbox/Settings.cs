@@ -9,5 +9,5 @@ public class Settings
 
    public TimeSpan OutboxRemovalTimerPeriod = TimeSpan.FromDays(1);
    public int PublisherBatchCount = 100;
-   public TimeSpan PublisherTimerPeriod = TimeSpan.FromSeconds(1);
+   public TimeSpan PublisherTimerPeriod = TimeSpan.FromSeconds(10);
 }

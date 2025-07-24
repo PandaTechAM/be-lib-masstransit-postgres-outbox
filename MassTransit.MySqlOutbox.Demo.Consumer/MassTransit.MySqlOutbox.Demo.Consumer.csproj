@@ -19,8 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MassTransit.MySqlOutbox.Demo.Shared\MassTransit.MySqlOutbox.Demo.Shared.csproj" />
+        <ProjectReference Include="..\MassTransit.MySqlOutbox.Demo.Shared\MassTransit.MySqlOutbox.Demo.Shared.csproj" />
     </ItemGroup>
-    
 
 </Project>

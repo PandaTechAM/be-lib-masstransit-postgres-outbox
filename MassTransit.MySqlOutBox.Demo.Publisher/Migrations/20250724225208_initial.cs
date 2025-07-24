@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MassTransit.MySqlOutbox.Demo.Migrations
 {
-    /// <inheritdoc />
-    public partial class initial : Migration
-    {
+   /// <inheritdoc />
+   public partial class initial : Migration
+   {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {

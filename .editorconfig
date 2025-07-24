@@ -1,8 +1,3 @@
-###############################
-#   PandaTech Editor Config   #
-###############################
-
-
 ################################
 # ReSharper Generated Settings #
 ################################
@@ -147,6 +142,8 @@ dotnet_diagnostic.cs0659.severity = error #overriding object.Equals but not over
 dotnet_diagnostic.cs0251.severity = error #Indexing an array with a negative index (array indices always start at zero)
 dotnet_diagnostic.s3363.severity = none #Never set DateTime as PrimaryKey. Ignored as we never do it but have warnings for cache entities.
 dotnet_diagnostic.ca2016.severity = error #Forwarding cancellation tokens
+dotnet_diagnostic.CS8981.severity = silent #The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
+
 csharp_style_namespace_declarations = file_scoped:error
 resharper_entity_framework_model_validation_unlimited_string_length_highlighting = none
 

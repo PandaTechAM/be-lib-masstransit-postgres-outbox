@@ -18,6 +18,6 @@ builder.AddMySqlContext<ConsumerContext>(connectionString);
 builder.Services.AddOutboxInboxServices<ConsumerContext>();
 
 var app = builder.Build();
-app.MigrateDatabase<ConsumerContext>();
+// app.MigrateDatabase<ConsumerContext>(); <<- run migrations from the publisher project
 
 app.Run();
