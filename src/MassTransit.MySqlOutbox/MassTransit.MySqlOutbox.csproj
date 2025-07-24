@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageIcon>pandatech.png</PackageIcon>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
+        <Authors>PropertyMe</Authors>
+        <Copyright>MIT</Copyright>
+        <Version>0.0.1</Version>
+        <PackageId>MassTransit.MySqlOutbox</PackageId>
+        <Title>MassTransit MySql Outbox Extension</Title>
+        <PackageTags>PropertyMe, library, MySql, distributed systems, microservices, modular monolith, messaging, efcore, mass transit, transactional outbox, outbox pattern, inbox pattern</PackageTags>
+        <Description>MassTransit.MySqlOutbox extends MassTransit to offer advanced message handling capabilities for distributed systems. With first-class support for multiple DbContexts, this library integrates seamlessly with Entity Framework Core and MySql, providing reliable Outbox and Inbox patterns.</Description>
+        <RepositoryUrl>https://github.com/PropertyMe/masstransit-mysql-outbox</RepositoryUrl>
+        <PackageReleaseNotes>Nuget updates</PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\Readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="8.4.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
+    </ItemGroup>
+
+</Project>

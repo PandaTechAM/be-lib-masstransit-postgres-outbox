@@ -1,7 +1,7 @@
 name: Deploy NuGet Package
 
 env:
-  PROJECT_PATH: './src/MassTransit.PostgresOutbox/MassTransit.PostgresOutbox.csproj'
+  PROJECT_PATH: './src/MassTransit.MySqlOutbox/MassTransit.MySqlOutbox.csproj'
   OUTPUT_DIR: 'nupkgs'
   NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
   NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
@@ -9,7 +9,8 @@ env:
 on:
   push:
     branches:
-      - main
+      - do-not-run-yet
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

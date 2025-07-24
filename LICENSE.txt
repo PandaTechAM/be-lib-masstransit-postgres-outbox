@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2023 PandaTech
+Copyright (c) for portions of MassTranit.MySqlOutbox are held by PandaTech, 2023 as part of the https://github.com/PandaTechAM/be-lib-masstransit-postgres-outbox project.
+All other copyright for MassTranit.MySqlOutbox are held by PropertyMe, 2025.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
