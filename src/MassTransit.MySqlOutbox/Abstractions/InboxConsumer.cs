@@ -28,8 +28,10 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
       var dbContext = _sp.GetRequiredService<TDbContext>();
       var logger = _sp.GetRequiredService<ILogger<InboxConsumer<TMessage, TDbContext>>>();
 
+      var ct = context.CancellationToken;
+
       var exists =
-         await dbContext.InboxMessages.AnyAsync(x => x.MessageId == messageId && x.ConsumerId == _consumerId);
+         await dbContext.InboxMessages.AnyAsync(x => x.MessageId == messageId && x.ConsumerId == _consumerId, ct);
 
       if (!exists)
       {
@@ -41,18 +43,21 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
             ConsumerId = _consumerId
          });
 
-         await dbContext.SaveChangesAsync();
+         await dbContext.SaveChangesAsync(ct);
       }
 
       await using var transactionScope =
          await dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-      var inboxMessage = await dbContext.InboxMessages
-                                        .Where(x => x.MessageId == messageId)
-                                        .Where(x => x.ConsumerId == _consumerId)
-                                        .Where(x => x.State == MessageState.New)
-                                        .ForUpdate(LockBehavior.SkipLocked)
-                                        .FirstOrDefaultAsync();
+         var inboxMessage = await dbContext.InboxMessages
+            .FromSqlInterpolated($@"
+               SELECT * FROM InboxMessages 
+               WHERE MessageId = {messageId} 
+               AND ConsumerId = {_consumerId} 
+               AND State = {MessageState.New}
+               FOR UPDATE SKIP LOCKED")
+            .FirstOrDefaultAsync(ct);
+
       if (inboxMessage == null)
       {
          return;
@@ -66,7 +71,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
          inboxMessage.UpdatedAt = DateTime.UtcNow;
 
          await dbContext.SaveChangesAsync();
-         await transactionScope.CommitAsync();
+         await transactionScope.CommitAsync(ct);
       }
       catch (Exception ex)
       {
@@ -77,7 +82,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
          await transactionScope.RollbackAsync();
 
          inboxMessage.UpdatedAt = DateTime.UtcNow;
-         await dbContext.SaveChangesAsync();
+         await dbContext.SaveChangesAsync(ct);
          throw;
       }
    }

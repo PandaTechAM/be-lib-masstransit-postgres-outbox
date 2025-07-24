@@ -35,11 +35,13 @@ internal class OutboxMessagePublisherService<TDbContext>(
          try
          {
             var messages = await dbContext.OutboxMessages
-                                          .Where(x => x.State == MessageState.New)
-                                          .OrderBy(x => x.CreatedAt)
-                                          .ForUpdate(LockBehavior.SkipLocked)
-                                          .Take(_batchCount)
-                                          .ToListAsync(cancellationToken);
+               .FromSqlInterpolated($@"
+                  SELECT * FROM OutboxMessages
+                  WHERE State = {MessageState.New}
+                  ORDER BY CreatedAt
+                  FOR UPDATE SKIP LOCKED
+                  LIMIT {_batchCount}")
+               .ToListAsync(cancellationToken);
 
             if (messages.Count == 0)
             {

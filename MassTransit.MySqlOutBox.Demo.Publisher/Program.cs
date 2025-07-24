@@ -1,3 +1,4 @@
+using System.Reflection;
 using MassTransit.MySqlOutbox.Demo;
 using MassTransit.MySqlOutbox.Demo.Contexts;
 using MassTransit.MySqlOutbox.Demo.Services;
@@ -7,15 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
+var connectionString = configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+   throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+}
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.AddMassTransit(typeof(Program).Assembly);
-builder.AddPostgresContext<PublisherContext>(
-   "Server=localhost;Port=5432;Database=nuget_publisher_demo;User Id=test;Password=test;Include Error Detail=True;");
+builder.AddMassTransit(configuration, typeof(Program).Assembly);
+
+builder.AddMySqlContext<PublisherContext>(connectionString);
 builder.Services.AddOutboxInboxServices<PublisherContext>();
 builder.Services.AddScoped<PublishService>();
-
 
 var app = builder.Build();
 

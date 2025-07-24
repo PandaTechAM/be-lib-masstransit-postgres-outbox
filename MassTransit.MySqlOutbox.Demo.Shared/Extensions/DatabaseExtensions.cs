@@ -6,15 +6,14 @@ namespace MassTransit.MySqlOutbox.Demo.Shared.Extensions;
 
 public static class DatabaseExtensions
 {
-   public static WebApplicationBuilder AddPostgresContext<TContext>(this WebApplicationBuilder builder,
+   public static WebApplicationBuilder AddMySqlContext<TContext>(this WebApplicationBuilder builder,
       string connectionString) where TContext : DbContext
    {
       builder.Services.AddDbContextPool<TContext>((sp, options) =>
       {
-         options.UseMysql(connectionString);
-
+         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
       });
-      
+
       return builder;
    }
 
