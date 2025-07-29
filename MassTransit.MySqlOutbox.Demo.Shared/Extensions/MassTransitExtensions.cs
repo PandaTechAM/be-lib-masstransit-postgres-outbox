@@ -18,7 +18,10 @@ public static class MassTransitExtensions
             cfg.Host(configuration.GetConnectionString("RabbitMq"));
             cfg.ConfigureEndpoints(context);
             cfg.UseMessageRetry(r =>
-               r.Exponential(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(2)));
+            {
+               r.Ignore<ApplicationException>();
+               r.Exponential(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(2));
+            });
          });
       });
 

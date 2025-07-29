@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MassTransit.MySqlOutbox.Demo.Migrations
 {
-   /// <inheritdoc />
-   public partial class initial : Migration
-   {
+    /// <inheritdoc />
+    public partial class init : Migration
+    {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
                 name: "InboxMessages",
                 columns: table => new
                 {
-                    MessageId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    MessageId = table.Column<byte[]>(type: "binary(16)", nullable: false),
                     ConsumerId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     State = table.Column<int>(type: "int", nullable: false),
@@ -35,7 +35,7 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
                 name: "OutboxMessages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<byte[]>(type: "binary(16)", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
                     Payload = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

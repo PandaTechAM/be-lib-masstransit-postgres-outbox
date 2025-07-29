@@ -16,8 +16,12 @@ builder.AddMassTransit(configuration, typeof(Program).Assembly);
 
 builder.AddMySqlContext<ConsumerContext>(connectionString);
 builder.Services.AddOutboxInboxServices<ConsumerContext>();
+builder.AddMySqlContext<CreationConsumerContext>(connectionString);
 
 var app = builder.Build();
 // app.MigrateDatabase<ConsumerContext>(); <<- run migrations from the publisher project
+
+Console.WriteLine("Consumer is running...");
+Console.WriteLine("Waiting for messages");
 
 app.Run();

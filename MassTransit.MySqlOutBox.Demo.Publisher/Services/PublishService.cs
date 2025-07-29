@@ -9,7 +9,8 @@ public class PublishService(PublisherContext dbContext)
    public async Task PublishComplexEventAsync()
    {
       var complexEvent = ComplexObjectEvent.Init();
-      dbContext.AddToOutbox(complexEvent);
+      var messageId = dbContext.AddToOutbox(complexEvent);
+      Console.WriteLine($"Message added to outbox at {DateTime.Now} (Id: {messageId})");
       await dbContext.SaveChangesAsync();
    }
 }

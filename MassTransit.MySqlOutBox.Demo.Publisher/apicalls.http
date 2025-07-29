@@ -1,0 +1,3 @@
+POST http://publisher.localtest.me/publish
+
+POST http://publisher.localtest.me/create

@@ -2,6 +2,7 @@
 using MassTransit.MySqlOutbox.Abstractions;
 using MassTransit.MySqlOutbox.Entities;
 using MassTransit.MySqlOutbox.Enums;
+using Medo;
 
 namespace MassTransit.MySqlOutbox.Extensions;
 
@@ -11,7 +12,7 @@ public static class OutboxDbContextExtensions
    {
       var entity = new OutboxMessage
       {
-         Id = Guid.NewGuid(),
+         Id = Uuid7.NewUuid7(), //time ordered UUIDs
          CreatedAt = DateTime.UtcNow,
          State = MessageState.New,
          UpdatedAt = null,

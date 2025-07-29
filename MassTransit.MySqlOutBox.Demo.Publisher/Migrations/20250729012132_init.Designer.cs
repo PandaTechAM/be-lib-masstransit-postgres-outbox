@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MassTransit.MySqlOutbox.Demo.Migrations
 {
     [DbContext(typeof(PublisherContext))]
-    [Migration("20250724225208_initial")]
-    partial class initial
+    [Migration("20250729012132_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,8 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
 
             modelBuilder.Entity("MassTransit.MySqlOutbox.Entities.InboxMessage", b =>
                 {
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("char(36)");
+                    b.Property<byte[]>("MessageId")
+                        .HasColumnType("binary(16)");
 
                     b.Property<string>("ConsumerId")
                         .HasColumnType("varchar(255)");
@@ -49,8 +49,8 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
 
             modelBuilder.Entity("MassTransit.MySqlOutbox.Entities.OutboxMessage", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                    b.Property<byte[]>("Id")
+                        .HasColumnType("binary(16)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");

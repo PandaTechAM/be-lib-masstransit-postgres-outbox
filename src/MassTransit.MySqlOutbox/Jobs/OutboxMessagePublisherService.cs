@@ -38,7 +38,7 @@ internal class OutboxMessagePublisherService<TDbContext>(
                .FromSqlInterpolated($@"
                   SELECT * FROM OutboxMessages
                   WHERE State = {MessageState.New}
-                  ORDER BY CreatedAt
+                  ORDER BY Id
                   LIMIT {_batchCount}
                   FOR UPDATE SKIP LOCKED")
                .ToListAsync(cancellationToken);

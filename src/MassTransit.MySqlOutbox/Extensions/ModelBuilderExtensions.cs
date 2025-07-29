@@ -9,8 +9,10 @@ public static class ModelBuilderExtensions
    {
       var entity = modelBuilder.Entity<OutboxMessage>();
 
+
       entity.HasKey(x => x.Id);
       entity.Property(x => x.Id)
+            .HasColumnType("binary(16)")
             .ValueGeneratedNever();
 
       return modelBuilder;
@@ -19,6 +21,10 @@ public static class ModelBuilderExtensions
    public static ModelBuilder ConfigureInboxMessageEntity(this ModelBuilder modelBuilder)
    {
       var entity = modelBuilder.Entity<InboxMessage>();
+
+      entity.Property(x => x.MessageId)
+            .HasColumnType("binary(16)")
+            .ValueGeneratedNever();
 
       entity.HasKey(x => new
       {

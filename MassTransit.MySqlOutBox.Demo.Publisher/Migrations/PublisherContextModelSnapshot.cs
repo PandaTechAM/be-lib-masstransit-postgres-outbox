@@ -24,8 +24,8 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
 
             modelBuilder.Entity("MassTransit.MySqlOutbox.Entities.InboxMessage", b =>
                 {
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("char(36)");
+                    b.Property<byte[]>("MessageId")
+                        .HasColumnType("binary(16)");
 
                     b.Property<string>("ConsumerId")
                         .HasColumnType("varchar(255)");
@@ -46,8 +46,8 @@ namespace MassTransit.MySqlOutbox.Demo.Migrations
 
             modelBuilder.Entity("MassTransit.MySqlOutbox.Entities.OutboxMessage", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                    b.Property<byte[]>("Id")
+                        .HasColumnType("binary(16)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");

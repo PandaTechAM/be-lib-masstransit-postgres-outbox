@@ -47,7 +47,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
       }
 
       await using var transactionScope =
-         await dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+         await dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
 
          var inboxMessage = await dbContext.InboxMessages
             .FromSqlInterpolated($@"
@@ -56,6 +56,7 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
                AND ConsumerId = {_consumerId}
                AND State = {MessageState.New}
                FOR UPDATE SKIP LOCKED")
+            .OrderBy(x => x.MessageId)
             .FirstOrDefaultAsync(ct);
 
       if (inboxMessage == null)
@@ -65,12 +66,12 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
 
       try
       {
-         await Consume(context.Message, transactionScope);
+         await Consume(context.Message, transactionScope, ct);
 
          inboxMessage.State = MessageState.Done;
          inboxMessage.UpdatedAt = DateTime.UtcNow;
 
-         await dbContext.SaveChangesAsync();
+         await dbContext.SaveChangesAsync(ct);
          await transactionScope.CommitAsync(ct);
       }
       catch (Exception ex)
@@ -79,13 +80,14 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
             messageId,
             _consumerId);
          
-         await transactionScope.RollbackAsync();
+         await transactionScope.RollbackAsync(ct);
 
+         //There was an exception. Update the inbox item to reflect the time we failed
          inboxMessage.UpdatedAt = DateTime.UtcNow;
          await dbContext.SaveChangesAsync(ct);
          throw;
       }
    }
 
-   protected abstract Task Consume(TMessage message, IDbContextTransaction transactionScope);
+   protected abstract Task Consume(TMessage message, IDbContextTransaction transactionScope, CancellationToken ct);
 }
