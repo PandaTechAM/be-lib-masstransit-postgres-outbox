@@ -14,6 +14,11 @@ public class ContextForDDDEntity : DbContext, IOutboxDbContext
    {
    }
 
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+   {
+      modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", t => t.ExcludeFromMigrations());
+   }
+
    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
    {
       configurationBuilder.IgnoreAny<DomainEvent>();
