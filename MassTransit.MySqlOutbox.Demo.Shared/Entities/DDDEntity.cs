@@ -9,12 +9,13 @@ public class DDDEntity
 
    protected void RaiseDomainEvent(DomainEvent domainEvent) => _domainEvents.Add(domainEvent);
    public void ClearDomainEvents() => _domainEvents.Clear();
+   private static readonly Random random = new(Guid.NewGuid().GetHashCode());
 
    public int Id { get; private init; }
 
    public DDDEntity()
    {
-      Id = new Random(Guid.NewGuid().GetHashCode()).Next(1, 1000);
+      Id = random.Next(1, 1000000);
       RaiseDomainEvent(new EntityCreated(Id, DateTimeOffset.UtcNow));
    }
 

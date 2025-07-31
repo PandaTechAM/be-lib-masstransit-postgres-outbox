@@ -16,16 +16,17 @@ public class CreatedEventConsumer(CreationConsumerContext dbContext, IServicePro
    {
       var id  = message.EntityId;
       Console.WriteLine($"DDDEntity with id {id} was created at {message.OccurredAt}. Event received at {DateTime.Now}");
-      if (DateTime.Now.Second % 2 == 0)
+      switch (DateTime.Now.Millisecond % 3)
       {
-         Console.WriteLine($"Application Exception thrown for {id}");
-         throw new ApplicationException("Exception throwing simulation");
+         case 0:
+            Console.WriteLine($" ------ >>>> Application Exception thrown for {id}");
+            throw new ApplicationException("Exception throwing simulation");
+         case 1:
+            Console.WriteLine($" ------ >>>> End of stream exception thrown for {id}");
+            throw new EndOfStreamException();
+         default:
+            return Task.CompletedTask;
       }
-      else
-      {
-         Console.WriteLine($"End of stream exception thrown for {id}");
-         throw new EndOfStreamException();
-      }
-      return Task.CompletedTask;
+
    }
 }
