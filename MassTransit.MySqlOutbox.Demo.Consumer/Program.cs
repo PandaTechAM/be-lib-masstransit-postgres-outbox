@@ -1,27 +1,70 @@
+using CommandLine;
+using MassTransit;
 using MassTransit.MySqlOutbox.Demo.Consumer.Contexts;
 using MassTransit.MySqlOutbox.Demo.Shared.Extensions;
 using MassTransit.MySqlOutbox.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var parserResult = Parser.Default.ParseArguments<Options>(args);
 
-var configuration = builder.Configuration;
+if (parserResult.Errors.Any())
+{
+   Console.WriteLine(parserResult.Errors.ToString());// Handle errors
+   return;
+}
+
+var consumerId = parserResult.Value.ConsumerId;
+
+var configuration = new ConfigurationBuilder()
+   .AddJsonFile("appsettings.json")
+   .AddEnvironmentVariables()
+   .Build();
+
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrEmpty(connectionString))
 {
    throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 }
 
-builder.Services.AddEndpointsApiExplorer();
-builder.AddMassTransit(configuration, typeof(Program).Assembly);
+var host = Host.CreateDefaultBuilder(args)
+   .ConfigureLogging(logging =>
+   {
+      logging.AddConsole();
+      logging.AddDebug();
+      logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+   })
+   .ConfigureServices((context, services) =>
+   {
+      services.AddSingleton(new Options() { ConsumerId = consumerId });
+      services.AddMassTransit(x =>
+      {
+         x.AddConsumers(typeof(Program).Assembly);
+         x.SetKebabCaseEndpointNameFormatter();
+         x.UsingRabbitMq((context, cfg) =>
+         {
+            cfg.Host(configuration.GetConnectionString("RabbitMq"));
+            cfg.ConfigureEndpoints(context);
+            cfg.UseMessageRetry(r =>
+            {
+               r.Ignore<ApplicationException>();
+               r.Exponential(10, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(2));
+            });
+         });
+      });
 
-builder.AddMySqlContext<ConsumerContext>(connectionString);
-builder.Services.AddOutboxInboxServices<ConsumerContext>();
-builder.AddMySqlContext<CreationConsumerContext>(connectionString);
+      services.AddMySqlContext<ConsumerContext>(connectionString);
+      services.AddOutboxInboxServices<ConsumerContext>();
+      services.AddMySqlContext<CreationConsumerContext>(connectionString);
+   })
+   .Build();
 
-var app = builder.Build();
-// app.MigrateDatabase<ConsumerContext>(); <<- run migrations from the publisher project
 
-Console.WriteLine("Consumer is running...");
+Console.WriteLine($"Consumer {consumerId} is running...");
 Console.WriteLine("Waiting for messages");
 
-app.Run();
+await host.RunAsync();
+
+public record Options
+{
+   [Option('i', "id", Required = false, HelpText = "Identifier for the publisher instance", Default = "1")]
+   public string? ConsumerId { get; init; }
+};

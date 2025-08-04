@@ -23,6 +23,18 @@ public static class DatabaseExtensions
       return builder;
    }
 
+   public static IServiceCollection AddMySqlContext<TContext>(this IServiceCollection services,
+      string connectionString) where TContext : DbContext
+   {
+      services.AddDbContextPool<TContext>((sp, options) =>
+      {
+         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+      });
+
+      return services;
+   }
+
+
    public static WebApplication MigrateDatabase<TContext>(this WebApplication app)
       where TContext : DbContext
    {

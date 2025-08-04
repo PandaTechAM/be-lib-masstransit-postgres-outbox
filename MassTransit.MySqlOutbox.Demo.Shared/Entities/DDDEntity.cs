@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using MassTransit.MySqlOutbox.Demo.Shared.Events;
 
 namespace MassTransit.MySqlOutbox.Demo.Shared.Entities;
@@ -15,9 +16,12 @@ public class DDDEntity
 
    public DDDEntity()
    {
-      Id = random.Next(1, 1000000);
-      RaiseDomainEvent(new EntityCreated(Id, DateTimeOffset.UtcNow));
    }
 
+   public DDDEntity(string publisherId)
+   {
+      Id = random.Next(1, 1000000);
+      RaiseDomainEvent(new EntityCreated(Id, publisherId ?? "", DateTimeOffset.UtcNow));
+   }
 
 }
