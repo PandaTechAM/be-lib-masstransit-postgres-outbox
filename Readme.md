@@ -25,9 +25,10 @@ This library is one such alternative. It is built for MySQL and provides seamles
   control, making your message handling processes more robust.
 - **Simple Integration**: Designed to fit easily into existing MassTransit and EF Core based projects.
 
-## Pre-Requisites
+## Dependencies
 
 - .NET Core 8 or later
+- Pomelo.EntityFramework.Core.MySql v8.0.3
 
 ## Installation
 

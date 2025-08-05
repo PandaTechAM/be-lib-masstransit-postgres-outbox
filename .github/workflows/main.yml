@@ -7,9 +7,10 @@ env:
   NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - do-not-run-yet
+      - none-yet
 
 jobs:
   deploy:
