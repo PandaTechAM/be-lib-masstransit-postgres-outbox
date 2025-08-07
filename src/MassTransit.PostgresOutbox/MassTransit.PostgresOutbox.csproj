@@ -8,7 +8,7 @@
         <PackageReadmeFile>Readme.md</PackageReadmeFile>
         <Authors>Pandatech</Authors>
         <Copyright>MIT</Copyright>
-        <Version>3.0.1</Version>
+        <Version>3.0.2</Version>
         <PackageId>Pandatech.MassTransit.PostgresOutbox</PackageId>
         <Title>Pandatech MassTransit PostgreSQL Outbox Extension</Title>
         <PackageTags>Pandatech, library, postgres, distributed systems, microservices, modular monolith, messaging, efcore, mass transit, outbox pattern, inbox pattern</PackageTags>
@@ -23,10 +23,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MassTransit" Version="8.4.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
-        <PackageReference Include="Pandatech.EFCore.PostgresExtensions" Version="5.1.2" />
+        <PackageReference Include="MassTransit" Version="8.5.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+        <PackageReference Include="Pandatech.EFCore.PostgresExtensions" Version="5.1.3" />
     </ItemGroup>
 
 </Project>
