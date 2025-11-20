@@ -75,11 +75,13 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
          logger.LogError(ex, "Exception thrown while consuming message {messageId} by {consumerId}",
             messageId,
             _consumerId);
-         
+
          await transactionScope.RollbackAsync();
 
-         inboxMessage.UpdatedAt = DateTime.UtcNow;
-         await dbContext.SaveChangesAsync();
+         await dbContext.InboxMessages
+                        .Where(x => x.MessageId == messageId && x.ConsumerId == _consumerId)
+                        .ExecuteUpdateAsync(x => x.SetProperty(x => x.UpdatedAt, x => DateTime.UtcNow));
+
          throw;
       }
    }
