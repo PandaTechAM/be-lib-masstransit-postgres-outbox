@@ -1,4 +1,3 @@
-using MassTransit.PostgresOutbox.Demo;
 using MassTransit.PostgresOutbox.Demo.Contexts;
 using MassTransit.PostgresOutbox.Demo.Services;
 using MassTransit.PostgresOutbox.Demo.Shared.Extensions;

@@ -3,18 +3,19 @@ using MassTransit.PostgresOutbox.Entities;
 using MassTransit.PostgresOutbox.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace MassTransit.PostgresOutbox.Demo.Contexts;
-public class PublisherContext(DbContextOptions<PublisherContext> options) : DbContext(options)
+namespace MassTransit.PostgresOutbox.Demo.Consumer.Contexts;
+
+public class ConsumerContext(DbContextOptions<ConsumerContext> options) : DbContext(options)
    , IOutboxDbContext, IInboxDbContext
 {
    public DbSet<InboxMessage> InboxMessages { get; set; }
    public DbSet<OutboxMessage> OutboxMessages { get; set; }
-   
+
    protected override void OnModelCreating(ModelBuilder modelBuilder)
    {
       base.OnModelCreating(modelBuilder);
 
-      modelBuilder.ApplyConfigurationsFromAssembly(typeof(PublisherContext).Assembly);
+      modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConsumerContext).Assembly);
       modelBuilder.ConfigureInboxOutboxEntities();
    }
 }
