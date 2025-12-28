@@ -4,28 +4,6 @@ namespace MassTransit.PostgresOutbox.Tests;
 
 public class SerializationTests
 {
-   public class ComplexObject
-   {
-      public int Integer { get; set; }
-      public string? String { get; set; }
-      public double Double { get; set; }
-      public bool Boolean { get; set; }
-      public DateTime DateTime { get; set; }
-      public NestedObject? Nested { get; set; }
-      public List<string>? StringList { get; set; }
-      public Dictionary<string, int>? StringIntDictionary { get; set; }
-      public TestEnum EnumValue { get; set; }
-      public object? ArbitraryObject { get; set; }
-      public Guid Guid { get; set; }
-   }
-
-   public class NestedObject
-   {
-      public int NestedInt { get; set; }
-      public string? NestedString { get; set; }
-      public List<NestedObject>? Children { get; set; }
-   }
-
    public enum TestEnum
    {
       None = 0,
@@ -50,12 +28,12 @@ public class SerializationTests
             NestedString = "Nested",
             Children = new List<NestedObject>
             {
-               new NestedObject
+               new()
                {
                   NestedInt = 1,
                   NestedString = "Child1"
                },
-               new NestedObject
+               new()
                {
                   NestedInt = 2,
                   NestedString = null
@@ -87,12 +65,15 @@ public class SerializationTests
       };
 
       // Act
-     
-      var options = new JsonSerializerOptions { WriteIndented = true };
-      string json = JsonSerializer.Serialize(original, options);
+
+      var options = new JsonSerializerOptions
+      {
+         WriteIndented = true
+      };
+      var json = JsonSerializer.Serialize(original, options);
 
       // Use Type directly to mimic dynamic deserialization
-      Type objectType = original.GetType();
+      var objectType = original.GetType();
       var deserialized = JsonSerializer.Deserialize(json, objectType, options);
 
       // Assert
@@ -103,63 +84,90 @@ public class SerializationTests
    }
 
    private static bool DeepCompare(object original, object deserialized, string? path = null)
-{
-    var originalType = original.GetType();
-    var deserializedType = deserialized.GetType();
+   {
+      var originalType = original.GetType();
+      var deserializedType = deserialized.GetType();
 
-    if (originalType != deserializedType)
-    {
-        Console.WriteLine($"Type mismatch at {path}: {originalType} vs {deserializedType}");
-        return false;
-    }
+      if (originalType != deserializedType)
+      {
+         Console.WriteLine($"Type mismatch at {path}: {originalType} vs {deserializedType}");
+         return false;
+      }
 
-    foreach (var property in originalType.GetProperties())
-    {
-        if (property.GetIndexParameters().Length > 0)
+      foreach (var property in originalType.GetProperties())
+      {
+         if (property.GetIndexParameters()
+                     .Length > 0)
+         {
             continue;
+         }
 
-        var propertyPath = path == null ? property.Name : $"{path}.{property.Name}";
-        var originalValue = property.GetValue(original);
-        var deserializedValue = property.GetValue(deserialized);
+         var propertyPath = path == null ? property.Name : $"{path}.{property.Name}";
+         var originalValue = property.GetValue(original);
+         var deserializedValue = property.GetValue(deserialized);
 
-        if (originalValue is null && deserializedValue is null)
+         if (originalValue is null && deserializedValue is null)
+         {
             continue;
+         }
 
-        if (originalValue is null || deserializedValue is null)
-        {
+         if (originalValue is null || deserializedValue is null)
+         {
             Console.WriteLine($"Null mismatch at {propertyPath}");
             return false;
-        }
+         }
 
-        if (property.PropertyType == typeof(object) || deserializedValue is JsonElement)
-        {
+         if (property.PropertyType == typeof(object) || deserializedValue is JsonElement)
+         {
             var serializedOriginal = JsonSerializer.Serialize(originalValue);
             var serializedDeserialized = JsonSerializer.Serialize(deserializedValue);
             if (serializedOriginal != serializedDeserialized)
             {
-                Console.WriteLine($"JsonElement mismatch at {propertyPath}");
-                return false;
+               Console.WriteLine($"JsonElement mismatch at {propertyPath}");
+               return false;
             }
 
             continue;
-        }
+         }
 
-        // Recursive comparison for complex types
-        if (property.PropertyType.IsClass && !property.PropertyType.IsPrimitive && property.PropertyType != typeof(string))
-        {
+         // Recursive comparison for complex types
+         if (property.PropertyType.IsClass && !property.PropertyType.IsPrimitive &&
+             property.PropertyType != typeof(string))
+         {
             if (!DeepCompare(originalValue, deserializedValue, propertyPath))
-                return false;
-        }
-        else if (!Equals(originalValue, deserializedValue))
-        {
+            {
+               return false;
+            }
+         }
+         else if (!Equals(originalValue, deserializedValue))
+         {
             Console.WriteLine($"Value mismatch at {propertyPath}: {originalValue} vs {deserializedValue}");
             return false;
-        }
-    }
+         }
+      }
 
-    return true;
-}
+      return true;
+   }
 
+   public class ComplexObject
+   {
+      public int Integer { get; set; }
+      public string? String { get; set; }
+      public double Double { get; set; }
+      public bool Boolean { get; set; }
+      public DateTime DateTime { get; set; }
+      public NestedObject? Nested { get; set; }
+      public List<string>? StringList { get; set; }
+      public Dictionary<string, int>? StringIntDictionary { get; set; }
+      public TestEnum EnumValue { get; set; }
+      public object? ArbitraryObject { get; set; }
+      public Guid Guid { get; set; }
+   }
 
-
+   public class NestedObject
+   {
+      public int NestedInt { get; set; }
+      public string? NestedString { get; set; }
+      public List<NestedObject>? Children { get; set; }
+   }
 }

@@ -12,9 +12,8 @@ public static class DatabaseExtensions
       builder.Services.AddDbContextPool<TContext>((sp, options) =>
       {
          options.UseNpgsql(connectionString);
-
       });
-      
+
       return builder;
    }
 

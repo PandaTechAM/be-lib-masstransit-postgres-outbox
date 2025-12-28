@@ -72,7 +72,8 @@ public abstract class InboxConsumer<TMessage, TDbContext> : IConsumer<TMessage>
       }
       catch (Exception ex)
       {
-         logger.LogError(ex, "Exception thrown while consuming message {messageId} by {consumerId}",
+         logger.LogError(ex,
+            "Exception thrown while consuming message {messageId} by {consumerId}",
             messageId,
             _consumerId);
 

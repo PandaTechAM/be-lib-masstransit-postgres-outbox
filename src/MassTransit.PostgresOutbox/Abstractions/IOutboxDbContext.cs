@@ -5,5 +5,5 @@ namespace MassTransit.PostgresOutbox.Abstractions;
 
 public interface IOutboxDbContext
 {
-   public DbSet<OutboxMessage> OutboxMessages { get; set; }
+   DbSet<OutboxMessage> OutboxMessages { get; set; }
 }
